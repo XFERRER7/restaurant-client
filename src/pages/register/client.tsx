@@ -43,7 +43,7 @@ export default function Register() {
 
     }
     catch (error) {
-      toast.error('Usuário ou senha inválidos')
+      toast.error('Erro ao cadastrar usuário')
     }
 
   }
