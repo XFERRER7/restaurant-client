@@ -4,7 +4,6 @@ import { useForm } from 'react-hook-form'
 import { zodResolver } from "@hookform/resolvers/zod"
 import { api } from "@/lib/axios"
 import { useRouter } from "next/router"
-import CurrencyInput from 'react-currency-input-field'
 import { IOrder } from "@/@types/types"
 import { toast } from "react-toastify"
 import { ItemsContext } from "@/contexts/Context"
@@ -23,7 +22,7 @@ export default function AdminPanel() {
 
   const [actionSelected, setActionSelected] = useState<'items' | 'report'>('items')
   const [orders, setOrders] = useState<IOrder[]>([])
-  const router = useRouter() 
+  const router = useRouter()
   const { notifications } = useContext(ItemsContext)
 
   const { register, handleSubmit, reset, formState: { errors }, getValues, watch } = useForm<TFormSchema>({
@@ -33,7 +32,7 @@ export default function AdminPanel() {
   const price = watch('price')
 
   async function createItem(data: TFormSchema) {
-    
+
     try {
 
       const response = await api.post('item/create', {
@@ -97,13 +96,12 @@ export default function AdminPanel() {
       })
     }
 
-
   }
 
-  function moneyMask (value: string) {
+  function moneyMask(value: string) {
 
-    if(!value) return 'R$ 0,00'
-    
+    if (!value) return 'R$ 0,00'
+
     value = value.replace('.', '').replace(',', '').replace(/\D/g, '')
 
     const options = { minimumFractionDigits: 2 }
@@ -246,7 +244,7 @@ export default function AdminPanel() {
                           </td>
                           <td
                             className="whitespace-nowrap px-6 py-4 1/5">
-                            {order.createdAt.slice(0, 10)}
+                            {order.createdAt.slice(0, 10).split('-').reverse().join('/')}
                           </td>
                           <td
                             className="whitespace-nowrap px-6 py-4 1/5">
@@ -254,7 +252,11 @@ export default function AdminPanel() {
                           </td>
                           <td
                             className="whitespace-nowrap px-6 py-4 1/5">
-                            {order.items.length}
+                            {
+                              order.items.reduce((acc, item) => {
+                                return acc + item.quantity
+                              }, 0)
+                            }
                           </td>
                         </tr>
                       )

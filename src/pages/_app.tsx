@@ -4,6 +4,7 @@ import { Poppins } from 'next/font/google'
 import { Context } from '../contexts/Context'
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import 'react-tabs/style/react-tabs.css';
 
 const poppins = Poppins({ style: 'normal', weight: '400', subsets: ['latin'] })
 

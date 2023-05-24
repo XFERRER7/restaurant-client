@@ -7,12 +7,14 @@ import { ReactNode, createContext, useEffect, useState } from "react"
 interface IContext {
   itemsCart: IContextItem[]
   notifications: INotification[]
+  userType: string
   addItemToCart: (item: IContextItem) => void
   removeItemFromCart: (item: IContextItem) => void
   increaseItemQuantity: (item: IContextItem) => void
   decreaseItemQuantity: (item: IContextItem) => void
   clearCart: () => void
   addNotification: (notification: INotification) => void
+  logOut: () => void
 }
 
 interface INotification {
@@ -31,6 +33,7 @@ export const Context = ({ children }: IContextProps) => {
 
   const [itemsCart, setItemsCart] = useState<IContextItem[]>([])
   const [notifications, setNotifications] = useState<INotification[]>([])
+  const [userType, setUserType] = useState<string>('')
   const router = useRouter()
 
   //Functions
@@ -113,6 +116,9 @@ export const Context = ({ children }: IContextProps) => {
       setItemsCart(JSON.parse(itemsCart))
     }
 
+    const userType = window.localStorage.getItem('userType')
+    setUserType(userType || '')
+
   }, [])
 
 
@@ -121,7 +127,7 @@ export const Context = ({ children }: IContextProps) => {
     <ItemsContext.Provider value={{
       itemsCart, addItemToCart, removeItemFromCart,
       increaseItemQuantity, decreaseItemQuantity,
-      clearCart, addNotification, notifications
+      clearCart, addNotification, notifications, userType, logOut
     }}>
       {children}
     </ItemsContext.Provider>
