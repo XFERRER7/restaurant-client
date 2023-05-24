@@ -29,14 +29,12 @@ export default function Home() {
   const [items, setItems] = useState<IItem[]>([])
   const { addItemToCart, itemsCart, addNotification, notifications } = useContext(ItemsContext)
   const [isEditingItem, setIsEditingItem] = useState(false)
-  const [isDeletingItem, setIsDeletingItem] = useState(false)
-  const [idItemToDelete, setIdItemToDelete] = useState(0)
   const [itemModal, setItemModal] = useState<IItem>({} as IItem)
   const [activeTab, setActiveTab] = useState(0)
 
   //Others variables 
   const router = useRouter()
-  const types = items.map(item => item.type).filter((value, index, self) => self.indexOf(value) === index)
+  const types = items.filter(item => item.quantity > 0).map(item => item.type).filter((value, index, self) => self.indexOf(value) === index)
   const userType = parseCookies().userType
 
   //Functions
@@ -100,16 +98,25 @@ export default function Home() {
 
   }, [items])
 
+
+  const debugItems = types.map(type => {
+    return {
+      type: type,
+      items: items.filter(item => item.type.toLocaleLowerCase() === type.toLocaleLowerCase())
+    }
+  })
+
+  console.log(debugItems)
   return (
     <div className="min-h-screen flex flex-col bg-zinc-100">
-      <Header />
+      <Header sectionActive="home"/>
 
       <div className="flex-1 flex flex-col gap-8 text-zinc-700">
 
         <div className="w-full flex justify-end px-10">
 
           <div className="w-1/3 h-20 flex items-center justify-center">
-            <h2 className="font-bold text-3xl">Cardápio</h2>
+            <h2 className="font-bold text-3xl text-zinc-600">Cardápio</h2>
           </div>
 
           <div className="w-1/3 h-20 flex items-center justify-end">
@@ -164,7 +171,6 @@ export default function Home() {
 
                           <div className="flex flex-wrap gap-5 justify-center relative">
 
-
                             <div className="w-64 h-[22rem] rounded-md bg-white flex flex-col shadow-md
                              relative
                             ">
@@ -172,26 +178,15 @@ export default function Home() {
                                 userType === 'admin' &&
                                 <>
                                   <div
-                                  className="h-12 w-12 bg-zinc-500 text-white rounded-full
+                                    className="h-12 w-12 bg-zinc-500 text-white rounded-full
                                 absolute -right-5 -top-4 flex items-center justify-center cursor-pointer"
-                                  onClick={() => {
-                                    setItemModal(item)
-                                    setIsEditingItem(!isEditingItem)
-                                  }}
-                                >
-                                  <Edit />
-                                </div>
-
-                                <div 
-                                className="h-12 w-12 bg-red-500 text-white rounded-full
-                                absolute -left-5 -top-4 flex items-center justify-center cursor-pointer"
-                                onClick={() => {
-                                  setIdItemToDelete(item.id)
-                                  setIsDeletingItem(!isDeletingItem)
-                                }}
-                                >
-                                    <Trash2 />
-                                </div>
+                                    onClick={() => {
+                                      setItemModal(item)
+                                      setIsEditingItem(!isEditingItem)
+                                    }}
+                                  >
+                                    <Edit />
+                                  </div>
                                 </>
                               }
 
@@ -249,13 +244,6 @@ export default function Home() {
         isEditingItem && <EditItemModal
           setIsEditingItem={setIsEditingItem}
           itemModal={itemModal}
-        />
-      }
-
-      {
-        isDeletingItem && <DeleteItemModal 
-        idItemToDelete={idItemToDelete}
-        setIsDeletingItem={setIsDeletingItem}
         />
       }
     </div>
