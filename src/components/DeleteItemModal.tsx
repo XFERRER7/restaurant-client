@@ -1,32 +1,39 @@
+import { IItem } from '@/@types/types'
 import { api } from '@/lib/axios'
 import React from 'react'
 import { toast } from 'react-toastify'
 
 interface IDeleteItemModalProps {
-  idItemToDelete: number
+  itemModal: IItem
   setIsDeletingItem: React.Dispatch<React.SetStateAction<boolean>>
 }
 
-export const DeleteItemModal = ({ idItemToDelete, setIsDeletingItem }: IDeleteItemModalProps) => {
+export const DeleteItemModal = ({ itemModal, setIsDeletingItem }: IDeleteItemModalProps) => {
 
   const handleDeleteItem = async () => {
     try {
 
-      const response = await api.delete(`item/delete/${idItemToDelete}`)
+      const response = await api.put('item/update', {
+        id: itemModal.id,
+        name: itemModal.name,
+        description: itemModal.description,
+        price: itemModal.price,
+        quantity: 0,
+        type: itemModal.type.toLowerCase()
+      })
 
-      if (response.status == 200) {
+      const { data: item } = response
+
+      if (item) {
+        toast.success('Estoque do item foi zerado!', {
+          autoClose: 1000
+        })
         setIsDeletingItem(false)
       }
 
-      toast.success('Item excluído com sucesso', {
-        autoClose: 1000,
-      })
-      
-    } catch (error) {
+    }
+    catch (error) {
       console.log(error)
-      toast.error('Erro ao excluir item', {
-        autoClose: 1000,
-      })
     }
   }
 
@@ -36,7 +43,7 @@ export const DeleteItemModal = ({ idItemToDelete, setIsDeletingItem }: IDeleteIt
       <div className='w-96 h-40 rounded bg-zinc-50 flex flex-col items-center justify-center gap-2'>
 
         <h1>
-          Tem certeza que deseja excluir este item?
+          Tem certeza que zerar o estoque desse item?
         </h1>
 
         <div className='w-full flex justify-center gap-5 text-white'>

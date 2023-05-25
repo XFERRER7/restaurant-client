@@ -65,7 +65,7 @@ export default function Cart() {
       <div className="w-full flex justify-end px-10">
 
         <div className="w-1/3 h-20 flex items-center justify-center">
-          <h2 className="font-bold text-3xl text-zinc-600">Detalhes do pedido</h2>
+          <h2 className="font-bold text-2xl text-zinc-600">Detalhes do pedido</h2>
         </div>
 
         <div className="w-1/3 h-20 flex items-center justify-end">

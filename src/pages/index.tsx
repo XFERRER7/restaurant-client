@@ -106,7 +106,6 @@ export default function Home() {
     }
   })
 
-  console.log(debugItems)
   return (
     <div className="min-h-screen flex flex-col bg-zinc-100">
       <Header sectionActive="home"/>
@@ -116,7 +115,7 @@ export default function Home() {
         <div className="w-full flex justify-end px-10">
 
           <div className="w-1/3 h-20 flex items-center justify-center">
-            <h2 className="font-bold text-3xl text-zinc-600">Cardápio</h2>
+            <h2 className="font-bold text-2xl text-zinc-600">Cardápio</h2>
           </div>
 
           <div className="w-1/3 h-20 flex items-center justify-end">
