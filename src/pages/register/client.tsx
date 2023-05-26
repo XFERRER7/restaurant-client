@@ -4,7 +4,7 @@ import z from "zod"
 import { api } from "@/lib/axios";
 import { useRouter } from "next/router";
 import uuid from "react-uuid";
-import { toast } from "react-toastify";
+import { ToastContainer, toast } from "react-toastify";
 
 const schema = z.object({
   name: z.string().max(20, { message: 'Nome pode ter no máximo 60 caracteres' }).nonempty({ message: 'Nome é obrigatório' }),
@@ -34,7 +34,6 @@ export default function Register() {
     try {
       const response = await api.post('client/create', dataForm)
       const data = response.data
-      console.log(data)
       if(data.id && data.email == dataForm.email) {
         router.push('/login/client')
         toast.success('Usuário cadastrado com sucesso')
@@ -43,7 +42,7 @@ export default function Register() {
 
     }
     catch (error) {
-      toast.error('Erro ao cadastrar usuário')
+      toast.error('Erro ao cadastrar usuário')     
     }
 
   }
@@ -82,7 +81,7 @@ export default function Register() {
           errors.email && <span className='text-red-500 text-sm'>{errors.email.message}</span> ||
           errors.password && <span className='text-red-500 text-sm'>{errors.password.message}</span>
         }
-        <button className='px-10 py-3 rounded bg-violet-700 text-white'>Entrar</button>
+        <button className='px-10 py-3 rounded bg-blue-500 text-white'>Cadastrar</button>
 
 
         <div>
@@ -93,7 +92,7 @@ export default function Register() {
         </div>
 
       </form>
-
+      <ToastContainer autoClose={1000}/>
     </div>
   )
 }

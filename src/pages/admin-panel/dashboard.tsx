@@ -7,6 +7,9 @@ import { useEffect, useState } from "react";
 import { IItem } from "@/@types/types";
 import { EditItemModal } from "@/components/EditItemModal";
 import { DeleteItemModal } from "@/components/DeleteItemModal";
+import { GetServerSideProps } from "next";
+import { parseCookies } from "nookies";
+import { ToastContainer } from "react-toastify";
 
 export default function AdminPanel2() {
 
@@ -48,14 +51,14 @@ export default function AdminPanel2() {
   return (
     <DashboardLayout>
 
-      <div className="w-full flex flex-col items-center gap-10 mt-10">
+      <div className="w-full flex flex-col items-center gap-10 mt-10 px-20 pb-3">
 
         <h3 className="font-bold text-xl">
           Items do cardápio
         </h3>
 
-        <div className="w-[40rem] h-96 bg-zinc-50">
-          <table className="min-w-full text-left text-sm font-light">
+        <div className="w-full h-96 bg-zinc-50 overflow-y-scroll shadow-md">
+          <table className="min-w-full text-center text-sm font-light">
             <thead className="border-b font-medium dark:border-neutral-500">
               <tr>
                 <th scope="col" className="px-6 py-4 w-[14.28%]">Nome</th>
@@ -132,6 +135,38 @@ export default function AdminPanel2() {
           itemModal={itemModal}
         />
       }
+      <ToastContainer autoClose={1000} />
     </DashboardLayout>
   )
+}
+
+
+export const getServerSideProps: GetServerSideProps = async (context: any) => {
+
+  const cookies = parseCookies(context)
+  const token = cookies.token;
+  const userType = cookies.userType
+
+  if (userType === 'client') {
+    return {
+      redirect: {
+        destination: '/',
+        permanent: false
+      }
+    }
+  }
+  
+  if (!token) {
+    return {
+      redirect: {
+        destination: userType === 'admin' ? '/login/admin' : '/login/client',
+        permanent: false
+      }
+    }
+  }
+
+
+  return {
+    props: {}
+  }
 }

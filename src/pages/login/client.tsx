@@ -3,9 +3,11 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import z from "zod"
 import { api } from "@/lib/axios";
 import { useRouter } from "next/router";
-import { toast } from 'react-toastify'
+import { ToastContainer, toast } from 'react-toastify'
 import uuid from "react-uuid";
 import axios from "axios";
+import { useContext } from "react";
+import { ItemsContext } from "@/contexts/Context";
 
 const schema = z.object({
   email: z.string().email({ message: 'Informe um email válido' }),
@@ -16,6 +18,8 @@ const schema = z.object({
 type ClientSchema = z.infer<typeof schema>;
 
 export default function Login() {
+
+  const { login } = useContext(ItemsContext)
 
   const router = useRouter()
 
@@ -30,36 +34,8 @@ export default function Login() {
 
   const onSubmit: SubmitHandler<ClientSchema> = async (dataForm) => {
 
-    try {
-      const response = await api.post('client/authenticate', dataForm)
-      const data = response.data
+    login(dataForm, 'client')
 
-      if (data.message == 'Authenticated') {
-
-        const token = uuid()
-
-        try {
-          const response = await axios.post(`http://localhost:3000/api/cookies/set`,
-            { token, userType: 'client' })
-          const data = response.data
-
-          if (data.token == token) {
-            router.push('/')
-          }
-
-        }
-        catch (error) {
-          console.log(error)
-        }
-
-        router.push('/')
-      }
-
-    }
-    catch (error) {
-      toast.error('Usuário ou senha inválidos')
-    }
-    
   }
 
 
@@ -90,7 +66,7 @@ export default function Login() {
           errors.email && <span className='text-red-500 text-sm'>{errors.email.message}</span> ||
           errors.password && <span className='text-red-500 text-sm'>{errors.password.message}</span>
         }
-        <button className='px-10 py-3 rounded bg-violet-700 text-white'>Entrar</button>
+        <button className='px-10 py-3 rounded bg-blue-500 text-white'>Entrar</button>
 
         <div>
           <span className='text-sm'>Não tem uma conta? </span>
@@ -100,7 +76,7 @@ export default function Login() {
         </div>
 
       </form>
-
+      <ToastContainer autoClose={1000}/>
     </div>
   )
 }

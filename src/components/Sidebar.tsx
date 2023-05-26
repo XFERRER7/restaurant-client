@@ -9,7 +9,7 @@ export const Sidebar = () => {
 
   const router = useRouter()
 
-  const { logOut } = useContext(ItemsContext)
+  const { logOut, user } = useContext(ItemsContext)
 
   useEffect(() => {
 
@@ -83,8 +83,6 @@ export const Sidebar = () => {
           </div>
         </div>
 
-
-
       </div>
 
       <div className="flex w-full flex-col mt-10 
@@ -107,9 +105,9 @@ export const Sidebar = () => {
             </div>
           </div>
 
-          <div className="flex flex-col text-xs">
-            <span>Admin</span>
-            <span>admin@gmail.com</span>
+          <div className="flex w-full flex-col text-xs">
+            <span>{user ? user.name : 'admin'}</span>
+            <span>{user ? user.email : 'admin@gmail.com'}</span>
           </div>
 
         </div>

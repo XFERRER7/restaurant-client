@@ -1,18 +1,18 @@
-import React, { useContext, useEffect } from 'react'
+import React from 'react'
 import { Sidebar } from './Sidebar'
 import Image from 'next/image'
 import logo from '../images/logo.png'
 import { ArrowRight, BellDot, Home } from 'lucide-react'
 import { Bell } from 'lucide-react'
 import { useRouter } from 'next/router'
-import { ItemsContext } from '@/contexts/Context'
+
 
 interface IDashboardLayoutProps {
   children: React.ReactNode
 }
 
 export const DashboardLayout = ({ children }: IDashboardLayoutProps) => {
-
+  
   const router = useRouter()
 
   return (

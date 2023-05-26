@@ -2,7 +2,6 @@ import '@/styles/globals.css'
 import type { AppProps } from 'next/app'
 import { Poppins } from 'next/font/google'
 import { Context } from '../contexts/Context'
-import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import 'react-tabs/style/react-tabs.css';
 
@@ -12,7 +11,6 @@ export default function App({ Component, pageProps }: AppProps) {
   return <div className={poppins.className}>
     <Context>
       <Component {...pageProps} />
-      <ToastContainer limit={1} />
     </Context>
   </div>
 }

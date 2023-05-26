@@ -11,11 +11,10 @@ import { IItem } from "@/@types/types";
 import { ItemsContext } from "@/contexts/Context";
 import { parseCookies } from "nookies";
 import { useRouter } from "next/router";
-import { toast } from "react-toastify";
+import { toast, ToastContainer } from "react-toastify";
 import { api } from "@/lib/axios";
 import { EditItemModal } from "@/components/EditItemModal";
 import { GetServerSideProps } from "next";
-import { DeleteItemModal } from "@/components/DeleteItemModal";
 
 
 export default function Home() {
@@ -27,7 +26,7 @@ export default function Home() {
 
   //States
   const [items, setItems] = useState<IItem[]>([])
-  const { addItemToCart, itemsCart, addNotification, notifications } = useContext(ItemsContext)
+  const { addItemToCart, itemsCart, addNotification, notifications, user } = useContext(ItemsContext)
   const [isEditingItem, setIsEditingItem] = useState(false)
   const [itemModal, setItemModal] = useState<IItem>({} as IItem)
   const [activeTab, setActiveTab] = useState(0)
@@ -108,7 +107,7 @@ export default function Home() {
 
   return (
     <div className="min-h-screen flex flex-col bg-zinc-100">
-      <Header sectionActive="home"/>
+      <Header sectionActive="home" />
 
       <div className="flex-1 flex flex-col gap-8 text-zinc-700">
 
@@ -117,19 +116,24 @@ export default function Home() {
           <div className="w-1/3 h-20 flex items-center justify-center">
             <h2 className="font-bold text-2xl text-zinc-600">Cardápio</h2>
           </div>
-
           <div className="w-1/3 h-20 flex items-center justify-end">
+            {
+              user?.type !== 'admin' &&
+              (
 
-            <button
-              className="bg-blue-500 flex items-center p-2 rounded justify-center gap-1 text-zinc-50"
-              onClick={() => router.push('/cart')}
-            >
-              <span>Carrinho</span>
-              <ShoppingCart />
-            </button>
 
+                <button
+                  className="bg-blue-500 flex items-center p-2 rounded justify-center gap-1 text-zinc-50"
+                  onClick={() => router.push('/cart')}
+                >
+                  <span>Carrinho</span>
+                  <ShoppingCart />
+                </button>
+
+
+              )
+            }
           </div>
-
         </div>
 
         <div className="w-full flex flex-col items-center justify-center px-3 pb-10">
@@ -204,18 +208,23 @@ export default function Home() {
                                 <span className="text-xs text-zinc-400">{item.description}</span>
                                 <div className="flex justify-between items-center">
                                   <span className="text-blue-500 font-semibold text-xl">{(item.price / 100).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}</span>
-                                  <button
-                                    className="bg-blue-500 flex items-center p-2 rounded justify-center gap-1 text-zinc-50
+                                  {
+                                    user?.type !== 'admin' &&
+                                    (
+                                      <button
+                                        className="bg-blue-500 flex items-center p-2 rounded justify-center gap-1 text-zinc-50
                                     disabled:bg-gray-500 cursor-pointer
                                     "
-                                    disabled={itemsCart.find(itemCart => itemCart.id === item.id) ? true : false}
-                                    onClick={() => handleAddItemToCart(item)}
-                                  >
-                                    <span className="text-sm">
-                                      {itemsCart.find(itemCart => itemCart.id === item.id) ? 'Adicionado' : 'Adicionar'}
-                                    </span>
-                                    <ShoppingCart size={18} />
-                                  </button>
+                                        disabled={itemsCart.find(itemCart => itemCart.id === item.id) ? true : false}
+                                        onClick={() => handleAddItemToCart(item)}
+                                      >
+                                        <span className="text-sm">
+                                          {itemsCart.find(itemCart => itemCart.id === item.id) ? 'Adicionado' : 'Adicionar'}
+                                        </span>
+                                        <ShoppingCart size={18} />
+                                      </button>
+                                    )
+                                  }
                                 </div>
 
                               </div>
@@ -245,6 +254,8 @@ export default function Home() {
           itemModal={itemModal}
         />
       }
+
+      <ToastContainer autoClose={1000}/>
     </div>
   )
 }

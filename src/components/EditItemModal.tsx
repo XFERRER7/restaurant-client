@@ -16,8 +16,7 @@ const formSchema = z.object({
   name: z.string().nonempty({ message: 'Nome do item é obrigatório' }),
   description: z.string().nonempty({ message: 'Descrição do item é obrigatório' }),
   price: z.string().nonempty({ message: 'Preço do item é obrigatório' }),
-  quantity: z.string().nonempty({ message: 'Quantidade do item é obrigatório' }).regex(/^\d+$/, { message: 'Quantidade do item deve ser um número inteiro' }),
-  type: z.string().nonempty({ message: 'Tipo do item é obrigatório' })
+  quantity: z.string().nonempty({ message: 'Quantidade do item é obrigatório' }).regex(/^\d+$/, { message: 'Quantidade do item deve ser um número inteiro' }).max(2, { message: 'Quantidade do item deve ser menor que 100' }), type: z.string().nonempty({ message: 'Tipo do item é obrigatório' })
 })
 
 type TFormSchema = z.infer<typeof formSchema>
@@ -32,7 +31,7 @@ export const EditItemModal = ({ itemModal, setIsEditingItem }: IEditItemModalPro
     })
 
   const updateItem = async (data: TFormSchema) => {
-    
+
     try {
 
       const response = await api.put('item/update', {
@@ -174,7 +173,7 @@ export const EditItemModal = ({ itemModal, setIsEditingItem }: IEditItemModalPro
         </form>
 
       </div>
-            
+
     </div>
   )
 }

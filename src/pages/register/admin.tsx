@@ -3,7 +3,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import z from "zod"
 import { useRouter } from "next/router";
 import { api } from "@/lib/axios";
-import { toast } from "react-toastify";
+import { ToastContainer, toast } from "react-toastify";
 
 const schema = z.object({
   name: z.string().max(20, { message: 'Nome pode ter no máximo 60 caracteres' }).nonempty({ message: 'Nome é obrigatório' }),
@@ -33,7 +33,7 @@ export default function Register() {
     try {
       const response = await api.post('admin/create', dataForm)
       const data = response.data
-      console.log(data)
+      
       if(data.id && data.email == dataForm.email) {
         router.push('/login/admin')
         toast.success('Administrador cadastrado com sucesso')
@@ -81,17 +81,17 @@ export default function Register() {
           errors.email && <span className='text-red-500 text-sm'>{errors.email.message}</span> ||
           errors.password && <span className='text-red-500 text-sm'>{errors.password.message}</span>
         }
-        <button className='px-10 py-3 rounded bg-violet-700 text-white'>Entrar</button>
+        <button className='px-10 py-3 rounded bg-blue-500 text-white'>Cadastrar</button>
 
         <div>
           <span className='text-gray-500 text-sm'>Já tem uma conta?</span>
-          <a href="/login" className='text-violet-700 text-sm'
+          <a className='text-violet-700 text-sm'
           onClick={(() => router.push('/login/admin'))}
           > Entrar</a>
         </div>
 
       </form>
-
+      <ToastContainer autoClose={1000}/>
     </div>
   )
 }

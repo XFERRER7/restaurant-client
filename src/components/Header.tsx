@@ -12,7 +12,7 @@ interface IHeaderProps {
 export const Header = ({ sectionActive }: IHeaderProps) => {
 
   const router = useRouter()
-  const { logOut } = useContext(ItemsContext)
+  const { logOut, user } = useContext(ItemsContext)
 
   return (
     <div className='w-full h-20 bg-blue-500 flex justify-between items-center px-10 gap-5'>
@@ -26,29 +26,34 @@ export const Header = ({ sectionActive }: IHeaderProps) => {
         <h1 className='text-3xl text-white font-bold w-13 text-center'>
           {
             sectionActive === 'admin' ? 'Painel de administrador' :
-            sectionActive === 'cart' ? 'Carrinho' : 'Menu'
+              sectionActive === 'cart' ? 'Carrinho' : 'Menu'
           }
         </h1>
       </div>
 
       <div className="w-1/3 h-full flex gap-8 text-white items-center justify-center">
         <span className={`flex items-center gap-1 text-zinc-50
-        hover:text-zinc-100 transition-colors cursor-pointer ${
-          sectionActive === 'admin' ? 'text-green-600' : ''
-        }`}
+        hover:text-zinc-100 transition-colors cursor-pointer ${sectionActive === 'admin' ? 'text-green-600' : ''
+          }`}
           onClick={() => {
-            sectionActive !== 'admin' ? router.push('/admin-panel/dashboard') : router.push('/')
+            router.push('/admin-panel/dashboard')
           }}
         >
           {
-            sectionActive === 'admin' ? 'Menu' : 'Painel de administrador'
+
+            user?.type !== 'admin' ? '' : 
+            <>
+              Painel de administrador
+              < ShieldAlert />
+            </>
+
           }
-          <ShieldAlert />
+
         </span>
 
         <span className='flex items-center gap-1 text-zinc-50
         hover:text-zinc-100 transition-colors cursor-pointer'
-        onClick={logOut}
+          onClick={logOut}
         >
           Sair
           <LogOut size={20} />

@@ -1,9 +1,10 @@
 import { Html, Head, Main, NextScript } from 'next/document'
-
 export default function Document() {
   return (
     <Html lang="pt-br">
-      <Head />
+      <Head>
+        <link rel="shortcut icon" href='../images/logo.png' type="image/x-icon" />
+      </Head>
       <body>
         <Main />
         <NextScript />

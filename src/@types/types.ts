@@ -21,3 +21,10 @@ export interface ItemOrder {
   name: string
   quantity: number
 }
+
+export interface IUser {
+  id: number
+  name: string
+  email: string
+  type: string
+}
