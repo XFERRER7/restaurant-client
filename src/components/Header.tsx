@@ -53,7 +53,9 @@ export const Header = ({ sectionActive }: IHeaderProps) => {
 
         <span className='flex items-center gap-1 text-zinc-50
         hover:text-zinc-100 transition-colors cursor-pointer'
-          onClick={logOut}
+          onClick={() => {
+              logOut('client')
+          }}
         >
           Sair
           <LogOut size={20} />

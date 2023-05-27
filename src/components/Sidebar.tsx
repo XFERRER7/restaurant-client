@@ -92,7 +92,7 @@ export const Sidebar = () => {
           <LogOut size={18} />
           <span
             className="font-bold"
-            onClick={() => logOut()}>
+            onClick={() => logOut('admin')}>
             Logout
           </span>
         </div>

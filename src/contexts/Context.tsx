@@ -1,5 +1,5 @@
 import { IContextItem } from "@/@types/extendedTypes"
-import { IItem, IUser } from "@/@types/types"
+import { IUser } from "@/@types/types"
 import { api } from "@/lib/axios"
 import { UserSchema } from "@/pages/login/admin"
 import axios from "axios"
@@ -21,7 +21,7 @@ interface IContext {
   decreaseItemQuantity: (item: IContextItem) => void
   clearCart: () => void
   addNotification: (notification: INotification) => void
-  logOut: () => void
+  logOut: (type: string) => void
 }
 
 interface INotification {
@@ -79,7 +79,12 @@ export const Context = ({ children }: IContextProps) => {
           if (data.token == token) {
             setUser(createdUser)
             window.localStorage.setItem('user', JSON.stringify(createdUser))
-            router.push('/')
+            if (userType == 'client') {
+              router.push('/')
+            }
+            else {
+              router.push('/admin-panel/dashboard')
+            }
           }
 
         }
@@ -95,7 +100,7 @@ export const Context = ({ children }: IContextProps) => {
 
   }
 
-  function logOut() {
+  function logOut(type: string) {
 
     setItemsCart([])
     window.localStorage.removeItem('itemsCart')
@@ -113,7 +118,11 @@ export const Context = ({ children }: IContextProps) => {
       path: '/',
     })
 
-    router.push('/login/client')
+    if (type == 'admin')
+      router.push('/login/admin')
+
+    else
+      router.push('/login/client')
 
   }
 

@@ -26,15 +26,6 @@ export const DashboardLayout = ({ children }: IDashboardLayoutProps) => {
           <h1 className='text-2xl font-bold'>Painel de administrador</h1>
           <div className='flex gap-5 items-center justify-center relative'>
 
-            <button
-              className='flex items-center justify-center gap-1 w-40 h-8 rounded
-            text-white underline hover:scale-105 transition-all'
-              onClick={() => router.push('/')}
-            >
-              Ir para o menu
-              <ArrowRight size={18} />
-            </button>
-
           </div>
         </div>
 
