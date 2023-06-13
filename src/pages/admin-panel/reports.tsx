@@ -11,6 +11,7 @@ import ProgressBar from '@ramonak/react-progress-bar'
 export default function Reports() {
 
   const [orders, setOrders] = useState<IOrder[]>([])
+  const [orderSelected, setOrderSelected] = useState<number | null>(null)
   const [downloadProgress, setDownloadProgress] = useState({
     isDownloading: false,
     progress: 0
@@ -36,7 +37,7 @@ export default function Reports() {
         progress: 0
       })
 
-      const response = await api.get('/order/get-report', {
+      const response = await api.get(`/order/get-report/${orderSelected}`, {
         responseType: 'blob',
         onDownloadProgress: (progressEvent) => {
           if (progressEvent.total) {
@@ -105,7 +106,16 @@ export default function Reports() {
               {
                 orders.map(order => {
                   return (
-                    <tr className="border-b dark:border-neutral-500">
+                    <tr className={`border-b dark:border-neutral-500 cursor-pointer ${
+                      orderSelected === order.id ? 'bg-zinc-300' : ''
+                    }`} onClick={() => {
+                      if (orderSelected === order.id) {
+                        setOrderSelected(null)
+                      }
+                      else {
+                        setOrderSelected(order.id)
+                      }
+                    }}>
                       <td
                         className="whitespace-nowrap px-6 py-4 font-medium 1/5">
                         {order.id}
@@ -138,10 +148,15 @@ export default function Reports() {
           </table>
         </div>
         <button
-          className="h-10 w-44 bg-blue-500 text-white mx-auto rounded ml-auto"
+          className="h-10 w-44 bg-blue-500 text-white mx-auto rounded ml-auto disabled:opacity-50 disabled:cursor-not-allowed"
           onClick={getReport}
+          disabled={orderSelected === null}
         >
-          Gerar relatório
+          {
+            orderSelected === null ?
+              'Selecione um pedido' :
+              'Gerar relatório'
+          }
         </button>
 
       </div>
