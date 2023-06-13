@@ -22,3 +22,10 @@ box-shadow: 3px 2px 14px 0px rgba(0,0,0,0.36);
   background-color: gray;
   border-radius: 5px;
 }
+
+.react-tabs__tab-panel--selected {
+  display: flex !important;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+}

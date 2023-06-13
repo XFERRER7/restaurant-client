@@ -98,13 +98,6 @@ export default function Home() {
   }, [items])
 
 
-  const debugItems = types.map(type => {
-    return {
-      type: type,
-      items: items.filter(item => item.type.toLocaleLowerCase() === type.toLocaleLowerCase())
-    }
-  })
-
   return (
     <div className="min-h-screen flex flex-col bg-zinc-100">
       <Header sectionActive="home" />
@@ -163,80 +156,85 @@ export default function Home() {
 
                 types.map(type => {
 
-                  return items.filter(item => item.type.toLocaleLowerCase() === type.toLocaleLowerCase())
-                    .map((item) => {
-                      if (item.quantity == 0) {
-                        return
-                      }
+                  return (
+                    <TabPanel className='flex flex-row'>
 
-                      return (
-                        <TabPanel className='flex'>
+                      {
+                        items.filter(item => item.type.toLocaleLowerCase() === type.toLocaleLowerCase())
+                          .map((item) => {
+                            if (item.quantity == 0) {
+                              return
+                            }
 
-                          <div className="flex flex-wrap gap-5 justify-center relative">
+                            return (
+                              <div className="flex flex-wrap gap-5 justify-center relative">
 
-                            <div className="w-64 h-[22rem] rounded-md bg-white flex flex-col shadow-md
-                             relative
-                            ">
-                              {
-                                userType === 'admin' &&
-                                <>
-                                  <div
-                                    className="h-12 w-12 bg-zinc-500 text-white rounded-full
-                                absolute -right-5 -top-4 flex items-center justify-center cursor-pointer"
-                                    onClick={() => {
-                                      setItemModal(item)
-                                      setIsEditingItem(!isEditingItem)
-                                    }}
-                                  >
-                                    <Edit />
-                                  </div>
-                                </>
-                              }
-
-                              <div className="h-1/2">
-                                <Image src={
-                                  item.type.toLocaleLowerCase() === 'pizza' ? pizzaImg :
-                                    item.type.toLocaleLowerCase() === 'bebida' ? bebidaImg :
-                                      item.type.toLocaleLowerCase() === 'lanche' ? lancheImg :
-                                        item.type.toLocaleLowerCase() === 'drink' ? drinkImg : ''
-                                } alt="pizza" width={256} height={256} />
-                              </div>
-
-                              <div className="h-1/2 flex flex-col justify-around px-4 py-3">
-
-                                <h3 className="font-bold text-black text-xl">{item.name}</h3>
-                                <span className="text-xs text-zinc-400">{item.description}</span>
-                                <div className="flex justify-between items-center">
-                                  <span className="text-blue-500 font-semibold text-xl">{(item.price / 100).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}</span>
+                                <div className="w-64 h-[22rem] rounded-md bg-white flex flex-col shadow-md
+                               relative">
                                   {
-                                    user?.type !== 'admin' &&
-                                    (
-                                      <button
-                                        className="bg-blue-500 flex items-center p-2 rounded justify-center gap-1 text-zinc-50
-                                    disabled:bg-gray-500 cursor-pointer
-                                    "
-                                        disabled={itemsCart.find(itemCart => itemCart.id === item.id) ? true : false}
-                                        onClick={() => handleAddItemToCart(item)}
+                                    userType === 'admin' &&
+                                    <>
+                                      <div
+                                        className="h-12 w-12 bg-zinc-500 text-white rounded-full
+                                  absolute -right-5 -top-4 flex items-center justify-center cursor-pointer"
+                                        onClick={() => {
+                                          setItemModal(item)
+                                          setIsEditingItem(!isEditingItem)
+                                        }}
                                       >
-                                        <span className="text-sm">
-                                          {itemsCart.find(itemCart => itemCart.id === item.id) ? 'Adicionado' : 'Adicionar'}
-                                        </span>
-                                        <ShoppingCart size={18} />
-                                      </button>
-                                    )
+                                        <Edit />
+                                      </div>
+                                    </>
                                   }
+
+                                  <div className="h-1/2">
+                                    <Image src={
+                                      item.type.toLocaleLowerCase() === 'pizza' ? pizzaImg :
+                                        item.type.toLocaleLowerCase() === 'bebida' ? bebidaImg :
+                                          item.type.toLocaleLowerCase() === 'lanche' ? lancheImg :
+                                            item.type.toLocaleLowerCase() === 'drink' ? drinkImg : ''
+                                    } alt="pizza" width={256} height={256} />
+                                  </div>
+
+                                  <div className="h-1/2 flex flex-col justify-around px-4 py-3">
+
+                                    <h3 className="font-bold text-black text-xl">{item.name}</h3>
+                                    <span className="text-xs text-zinc-400">{item.description}</span>
+                                    <div className="flex justify-between items-center">
+                                      <span className="text-blue-500 font-semibold text-xl">{(item.price / 100).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}</span>
+                                      {
+                                        user?.type !== 'admin' &&
+                                        (
+                                          <button
+                                            className="bg-blue-500 flex items-center p-2 rounded justify-center gap-1 text-zinc-50
+                                      disabled:bg-gray-500 cursor-pointer"
+                                            disabled={itemsCart.find(itemCart => itemCart.id === item.id) ? true : false}
+                                            onClick={() => handleAddItemToCart(item)}
+                                          >
+                                            <span className="text-sm">
+                                              {itemsCart.find(itemCart => itemCart.id === item.id) ? 'Adicionado' : 'Adicionar'}
+                                            </span>
+                                            <ShoppingCart size={18} />
+                                          </button>
+                                        )
+                                      }
+                                    </div>
+
+                                  </div>
+
                                 </div>
 
+
                               </div>
+                            )
 
-                            </div>
+                          })
+                      }
+
+                    </TabPanel>
+                  )
 
 
-                          </div>
-                        </TabPanel>
-                      )
-
-                    })
 
                 })
               }
@@ -255,7 +253,7 @@ export default function Home() {
         />
       }
 
-      <ToastContainer autoClose={1000}/>
+      <ToastContainer autoClose={1000} />
     </div>
   )
 }
