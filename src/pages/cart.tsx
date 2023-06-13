@@ -36,7 +36,7 @@ export default function Cart() {
     try {
 
       const response = await api.post('order/create', {
-        clientId: 1,
+        clientId: user?.id,
         items,
       })
 
